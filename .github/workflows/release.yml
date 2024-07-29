@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+      - name: Install poetry
+        run: |
+          pip install poetry
+          poetry --version
+      - name: Set package version
+        run: poetry version $(echo "${{ github.ref }}" | cut -d "/" -f 3)
+      - name: Update lock file
+        run: poetry lock
+      - name: Install dependencies and library
+        run: poetry install
+      - name: Build package
+        run: poetry build
+      - name: Publish package
+        run: poetry publish
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
