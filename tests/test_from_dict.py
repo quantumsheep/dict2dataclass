@@ -133,3 +133,18 @@ class TestFromDict(unittest.TestCase):
                     "bar_dict": {1: "2"},
                 }
             )
+
+    def test_subclass(self):
+        @dataclasses.dataclass
+        class Foo(FromDict):
+            bar_str: str
+
+        @dataclasses.dataclass
+        class Bar(Foo):
+            bar_int: int
+
+        data = {"bar_str": "bar", "bar_int": 1}
+        bar = Bar.from_dict(data)
+
+        self.assertEqual(bar.bar_str, "bar")
+        self.assertEqual(bar.bar_int, 1)
