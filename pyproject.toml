@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dict2dataclass"
-version = "0.1.0"
+version = "0.1.2"
 description = "Convert dicts into dataclasses. Supports lists, dicts and unions."
 authors = ["Nathanael DEMACON <quantumsheep@users.noreply.github.com>"]
 license = "Apache License 2.0"
