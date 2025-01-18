@@ -42,7 +42,7 @@ class DictField(dataclasses.Field):
             )
 
             if isinstance(keys, str):
-                keys = (keys,)
+                keys = [keys]
 
             self.from_dict_options = DictOptions(keys=keys)
 
@@ -67,10 +67,10 @@ class DictField(dataclasses.Field):
                 hash,
                 compare,
                 metadata,
-            )
+            )  # type: ignore
 
             if isinstance(keys, str):
-                keys = (keys,)
+                keys = [keys]
 
             self.from_dict_options = DictOptions(keys=keys)
 
@@ -80,12 +80,12 @@ def dict_field(
     *,
     default=dataclasses.MISSING,
     default_factory=dataclasses.MISSING,
-    init=True,
-    repr=True,
-    hash=None,
-    compare=True,
-    metadata=None,
-):
+    init: bool = True,
+    repr: bool = True,
+    hash: bool | None = None,
+    compare: bool = True,
+    metadata: Mapping[Any, Any] = {},
+) -> Any:
     if (
         default is not dataclasses.MISSING
         and default_factory is not dataclasses.MISSING
@@ -94,11 +94,11 @@ def dict_field(
 
     return DictField(
         keys if isinstance(keys, list) else [keys],
-        default,
-        default_factory,
-        init,
-        repr,
-        hash,
-        compare,
-        metadata,
+        default=default,
+        default_factory=default_factory,
+        init=init,
+        repr=repr,
+        hash=hash,
+        compare=compare,
+        metadata=metadata,
     )

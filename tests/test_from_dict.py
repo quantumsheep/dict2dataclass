@@ -148,3 +148,11 @@ class TestFromDict(unittest.TestCase):
 
         self.assertEqual(bar.bar_str, "bar")
         self.assertEqual(bar.bar_int, 1)
+
+    def test_raise_on_unknown_fields(self):
+        @dataclasses.dataclass
+        class Foo(FromDict):
+            bar_str: str
+
+        with self.assertRaises(ValueError):
+            Foo.from_dict({"bar_str": "bar", "bar_int": 1}, ignore_unknown_fields=False)

@@ -15,7 +15,12 @@ def _is_primitive(value: Any) -> bool:
 @dataclasses.dataclass
 class FromDict:
     @classmethod
-    def from_dict(cls, data: Any, fieldname=""):
+    def from_dict(
+        cls,
+        data: Any,
+        fieldname: str = "",
+        ignore_unknown_fields: bool = True,
+    ):
         if not isinstance(data, dict):
             raise ValueError(f"Expected dict, got {type(data)} for {fieldname}")
 
@@ -36,6 +41,9 @@ class FromDict:
         kwargs = {}
         for key, value in data.items():
             if key not in type_hints:
+                if ignore_unknown_fields:
+                    continue
+
                 raise ValueError(
                     f"Unknown field {key} in type {type(cls)} for {fieldname}"
                 )
@@ -48,7 +56,12 @@ class FromDict:
         return cls(**kwargs)
 
     @staticmethod
-    def _from_any(T: type, value: Any, fieldname="") -> Any:
+    def _from_any(
+        T: type,
+        value: Any,
+        fieldname: str = "",
+        ignore_unknown_fields: bool = True,
+    ) -> Any:
         if value is None:
             return None
 
@@ -105,6 +118,8 @@ class FromDict:
             return value
         elif origin is Union or origin is UnionType:
             types = typing.get_args(T)
+            last_error = ValueError(f"Union type must have at least one type")
+
             for subtype in types:
                 try:
                     return FromDict._from_any(subtype, value, fieldname)
@@ -113,6 +128,10 @@ class FromDict:
 
             raise last_error
         elif isinstance(T, type) and issubclass(T, FromDict):
-            return T.from_dict(value, fieldname)
+            return T.from_dict(
+                value,
+                fieldname=fieldname,
+                ignore_unknown_fields=ignore_unknown_fields,
+            )
 
         raise ValueError(f"Unsupported type {T}")
