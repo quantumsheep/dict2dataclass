@@ -4,6 +4,9 @@ This is a simple python script that converts a dictionary to a dataclass and a d
 
 ## Usage
 
+> [!NOTE]
+> The `FromDict` and `ToDict` classes **are compatible** between each other. You can use them both in the same dataclass.
+
 ### Dict -> Dataclass
 
 ```python
