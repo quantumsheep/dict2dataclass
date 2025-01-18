@@ -1,13 +1,25 @@
 # Dict 2 Dataclass
 
-This is a simple python script that converts a dictionary to a dataclass and a dataclass to a dictionary. It is useful when you want to access the dictionary values as class attributes.
+A lightweight Python utility to seamlessly convert between dictionaries and dataclasses. This is useful when you want to access dictionary values as class attributes or serialize dataclasses back to dictionaries.
+
+## Features
+
+- 🚀 **Easy Conversion:** Convert dictionaries to dataclasses and vice versa.
+- 🔗 **Nested Support:** Handles nested dataclasses effortlessly.
+- 🧩 **Intuitive API:** Simple and clean syntax for integration.
+
+## Installation
+
+```bash
+pip install dict2dataclass
+```
 
 ## Usage
 
-> [!NOTE]
-> The `FromDict` and `ToDict` classes **are compatible** between each other. You can use them both in the same dataclass.
+> **Note**
+> The `FromDict` and `ToDict` classes are **compatible**. You can use both in the same dataclass for full bidirectional conversion.
 
-### Dict -> Dataclass
+### Convert Dictionary to Dataclass
 
 ```python
 from dict2dataclass import FromDict
@@ -25,6 +37,7 @@ class Person(FromDict):
     age: int
     address: Address
 
+# Example dictionary
 data = {
     "name": "John Doe",
     "age": 30,
@@ -35,11 +48,13 @@ data = {
     }
 }
 
+# Convert to dataclass
 person = Person.from_dict(data)
-print(person.name) # John Doe
+print(person.name)      # Output: John Doe
+print(person.address.city)  # Output: Springfield
 ```
 
-### Dataclass -> Dict
+### Convert Dataclass to Dictionary
 
 ```python
 from dict2dataclass import ToDict
@@ -57,6 +72,7 @@ class Person(ToDict):
     age: int
     address: Address
 
+# Create a dataclass instance
 person = Person(
     name="John Doe",
     age=30,
@@ -67,6 +83,29 @@ person = Person(
     )
 )
 
+# Convert to dictionary
 data = person.to_dict()
-print(data) # {'name': 'John Doe', 'age': 30, 'address': {'street': '123 Main St', 'city': 'Springfield', 'state': 'IL'}}
+print(data)
+# Output: {'name': 'John Doe', 'age': 30, 'address': {'street': '123 Main St', 'city': 'Springfield', 'state': 'IL'}}
+```
+
+## Combining `FromDict` and `ToDict`
+
+For full bidirectional support, you can inherit from both `FromDict` and `ToDict`:
+
+```python
+from dict2dataclass import FromDict, ToDict
+from dataclasses import dataclass
+
+@dataclass
+class Address(FromDict, ToDict):
+    street: str
+    city: str
+    state: str
+
+@dataclass
+class Person(FromDict, ToDict):
+    name: str
+    age: int
+    address: Address
 ```
