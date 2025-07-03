@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dict2dataclass"
-version = "0.3.0"
+version = "0.4.0"
 description = "Convert dicts into dataclasses. Supports lists, dicts and unions."
 authors = ["Nathanael DEMACON <quantumsheep@users.noreply.github.com>"]
 license = "Apache License 2.0"
@@ -22,7 +22,6 @@ homepage = "https://github.com/quantumsheep/dict2dataclass"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.5.5"
