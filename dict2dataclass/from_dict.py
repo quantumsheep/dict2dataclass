@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import dataclasses
 import typing
-from types import UnionType
+from types import NoneType, UnionType
 from typing import Any, Union
 
 from dict2dataclass.dict_field import DictField
 
 
 def _is_primitive(value: Any) -> bool:
-    return value in (str, int, float, bool)
+    return value in (str, int, float, bool, NoneType)
 
 
 @dataclasses.dataclass
